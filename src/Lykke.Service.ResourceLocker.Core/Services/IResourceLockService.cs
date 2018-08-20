@@ -5,7 +5,7 @@ namespace Lykke.Service.ResourceLocker.Core.Services
 {
     public interface IResourceLockService
     {
-        Task<ILockedResource> GetAsync(string blockId);
-        void Block(ILockedResource lockedResource);
+        Task<bool> Release(IReleaseResourceRequest lockedResource);
+        Task<ILockedResourceResponse> Block(ILockedResourceRequest lockedResource);
     }
 }

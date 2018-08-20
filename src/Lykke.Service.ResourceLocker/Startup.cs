@@ -58,22 +58,51 @@ namespace Lykke.Service.ResourceLocker
         [UsedImplicitly]
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var builder = new ContainerBuilder();
-            var appSettings = Configuration.LoadSettings<AppSettings>();
-            builder.RegisterInstance(appSettings).As<IReloadingManager<AppSettings>>();
-
-            //ApplicationContainer = builder.Build();
-
-            return services.BuildServiceProvider<AppSettings>(options =>
+            try
             {
-                options.SwaggerOptions = _swaggerOptions;
+                services.AddMvc()
+                    .AddJsonOptions(options =>
+                    {
+                        options.SerializerSettings.ContractResolver =
+                            new DefaultContractResolver();
+                    });
 
-                options.Logs = logs =>
+                services.AddSwaggerGen(options =>
                 {
-                    logs.AzureTableName = "ResourceLockerLog";
-                    logs.AzureTableConnectionStringResolver = settings => settings.ResourceLockerService.Db.LogsConnString;
-                };
-            });
+                    options.DefaultLykkeConfiguration("v1", "ResourceLocker API");
+                });
+                services.Configure<MvcJsonOptions>(c =>
+                {
+                    // Serialize all properties to camelCase by default
+                    c.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
+
+
+                var builder = new ContainerBuilder();
+                var appSettings = Configuration.LoadSettings<AppSettings>();
+                builder.RegisterInstance(appSettings).As<IReloadingManager<AppSettings>>();
+                services.AddLykkeLogging(appSettings.Nested(x => x.ResourceLockerService.Db.LogsConnString),
+                    "ResourceLockerLog",
+                    appSettings.CurrentValue.SlackNotifications.AzureQueue.ConnectionString,
+                    appSettings.CurrentValue.SlackNotifications.AzureQueue.QueueName
+                );
+
+
+                if (appSettings.CurrentValue.MonitoringServiceClient != null)
+                    _monitoringServiceUrl = appSettings.CurrentValue.MonitoringServiceClient.MonitoringServiceUrl;
+
+                builder.RegisterModule(new ServiceModule(appSettings));
+                builder.Populate(services);
+                ApplicationContainer = builder.Build();
+                Log = ApplicationContainer.Resolve<ILogFactory>().CreateLog(this);
+                HealthNotifier = ApplicationContainer.Resolve<IHealthNotifier>();
+                return new AutofacServiceProvider(ApplicationContainer);
+            }
+            catch (Exception ex)
+            {
+                Log?.Critical(ex);
+                throw;
+            }
         }
 
         [UsedImplicitly]

@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Lykke.Common.Log;
 using Lykke.Service.ResourceLocker.Core.Services;
+using System;
+using Lykke.Service.ResourceLocker.Models;
+using Lykke.Service.ResourceLocker.Core.Domain;
 
 namespace Lykke.Service.ResourceLocker.Controllers
 {
@@ -12,11 +15,13 @@ namespace Lykke.Service.ResourceLocker.Controllers
     public class LockController : Controller
     {
         private readonly ILog _log;
+        private readonly IResourceLockService _resourceLockService;
         public LockController(
-            //[NotNull] ILogFactory logFactory,
-        IResourceLockService resourceLockService)
+            [NotNull] ILogFactory logFactory,
+            [NotNull] IResourceLockService resourceLockService)
         {
-            //_log = logFactory.CreateLog(this);
+            _log = logFactory.CreateLog(this);
+            _resourceLockService = resourceLockService;
         }
 
         /// <summary>
@@ -27,9 +32,33 @@ namespace Lykke.Service.ResourceLocker.Controllers
         /// <response code="404"></response>
         /// <response code="501"></response>
         [HttpPost]
-        [SwaggerOperation("LockResources")]
-        public async Task<IActionResult> LockResource()
+        [Route("lockresource")]
+        [SwaggerOperation("LockResource")]
+        public async Task<IActionResult> LockResource(LockedResourceRequest request)
         {
+            try
+            {
+                return Ok(await _resourceLockService.Block(request));
+            }
+            catch(Exception ex)
+            {
+
+            }
+            return Ok();
+        }
+        [HttpPost]
+        [Route("releaseresource")]
+        [SwaggerOperation("ReleaseResource")]
+        public async Task<IActionResult> ReleaseResource(ReleaseResourceRequest request)
+        {
+            try
+            {
+                return Ok(await _resourceLockService.Release(request));
+            }
+            catch (Exception ex)
+            {
+
+            }
             return Ok();
         }
     }

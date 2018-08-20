@@ -9,20 +9,25 @@ namespace Lykke.Service.ResourceLocker.Services
     [UsedImplicitly]
     public class ResourceLockService : IResourceLockService
     {
-        //private readonly IDistributedLockService _resourceLockService;
+        private readonly IDistributedLockService _resourceLockService;
         public ResourceLockService(IDistributedLockService resourceLockService)
         {
-            //_resourceLockService = resourceLockService ?? throw new ArgumentNullException(nameof(resourceLockService));
+            _resourceLockService = resourceLockService ?? throw new ArgumentNullException(nameof(resourceLockService));
         }
 
-        public void Block(ILockedResource lockedResource)
+        public async Task<ILockedResourceResponse> Block(ILockedResourceRequest lockedResource)
         {
-            //_resourceLockService.TryAcquireLockAsync(lockedResource.ResourceId, lockedResource.Owner, lockedResource.ExpirationTime);
+            var locked = new LockedResourceResponse
+            {
+                Key = _resourceLockService.GetCacheKey(lockedResource.ServiceName, lockedResource.ResourceId, lockedResource.Owner),
+                IsLocked = await _resourceLockService.TryAcquireLockAsync(lockedResource, lockedResource.ExpirationTime)
+            };
+            return locked;
         }
 
-        public Task<ILockedResource> GetAsync(string blockId)
+        public async Task<bool> Release(IReleaseResourceRequest lockedResource)
         {
-            throw new System.NotImplementedException();
+            return await _resourceLockService.ReleaseLockAsync(lockedResource.Key, lockedResource.ResourceId);
         }
     }
 }

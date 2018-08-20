@@ -19,7 +19,6 @@ namespace Lykke.Service.ResourceLocker.Modules
 
         protected override void Load(ContainerBuilder builder)
         {
-            // Do not register entire settings in container, pass necessary settings to services which requires them
             builder.RegisterType<HealthService>()
                 .As<IHealthService>()
                 .SingleInstance();
@@ -28,6 +27,7 @@ namespace Lykke.Service.ResourceLocker.Modules
                 .As<IConnectionMultiplexer>();
 
             builder.RegisterType<RedisLocksService>()
+                .WithParameter(TypedParameter.From(_appSettings.CurrentValue.ResourceLockerService.CacheSettings.ResourceLockCacheKeyPattern))
                 .As<IDistributedLockService>();
 
             builder.RegisterType<ResourceLockService>()

@@ -4,37 +4,56 @@
         <name>Lykke.Service.ResourceLocker.Client</name>
     </assembly>
     <members>
-        <member name="M:Lykke.Service.ResourceLocker.Client.AutofacExtension.RegisterResourceLockerClient(Autofac.ContainerBuilder,Lykke.Service.ResourceLocker.Client.ResourceLockerServiceClientSettings,System.Func{Lykke.HttpClientGenerator.HttpClientGeneratorBuilder,Lykke.HttpClientGenerator.HttpClientGeneratorBuilder})">
+        <member name="T:Lykke.Service.ResourceLocker.Client.Exceptions.DefaultErrorResponseException">
             <summary>
-            Registers <see cref="T:Lykke.Service.ResourceLocker.Client.IResourceLockerClient"/> in Autofac container using <see cref="T:Lykke.Service.ResourceLocker.Client.ResourceLockerServiceClientSettings"/>.
-            </summary>
-            <param name="builder">Autofac container builder.</param>
-            <param name="settings">ResourceLocker client settings.</param>
-            <param name="builderConfigure">Optional <see cref="T:Lykke.HttpClientGenerator.HttpClientGeneratorBuilder"/> configure handler.</param>
-        </member>
-        <member name="T:Lykke.Service.ResourceLocker.Client.IResourceLockerApi">
-            <summary>
-            ResourceLocker client API interface.
+            Represents error response from the PayInternal API service
             </summary>
         </member>
-        <member name="T:Lykke.Service.ResourceLocker.Client.IResourceLockerClient">
+        <member name="M:Lykke.Service.ResourceLocker.Client.Exceptions.DefaultErrorResponseException.#ctor(System.String)">
             <summary>
-            ResourceLocker client interface.
+            Initializes a new instance of <see cref="T:Lykke.Service.ResourceLocker.Client.Exceptions.DefaultErrorResponseException"/> with error message.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Lykke.Service.ResourceLocker.Client.Exceptions.DefaultErrorResponseException.#ctor(Lykke.Common.Api.Contract.Responses.ErrorResponse,Refit.ApiException)">
+            <summary>
+            Initializes a new instance of <see cref="T:Lykke.Service.ResourceLocker.Client.Exceptions.DefaultErrorResponseException"/> with response error details and API excepiton.
+            </summary>
+            <param name="error"></param>
+            <param name="inner"></param>
+        </member>
+        <member name="T:Lykke.Service.ResourceLocker.Client.Exceptions.ErrorResponseException`1">
+            <summary>
+            Represents base error response from the PayInternal API service
             </summary>
         </member>
-        <member name="P:Lykke.Service.ResourceLocker.Client.IResourceLockerClient.Api">
-            <summary>Application Api interface</summary>
+        <member name="M:Lykke.Service.ResourceLocker.Client.Exceptions.ErrorResponseException`1.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of <see cref="!:ErrorResponseException"/> with error message.
+            </summary>
+            <param name="message">The error message</param>
+        </member>
+        <member name="M:Lykke.Service.ResourceLocker.Client.Exceptions.ErrorResponseException`1.#ctor(`0,Refit.ApiException)">
+            <summary>
+            Initializes a new instance of <see cref="!:ErrorResponseException"/> with response error details and API excepiton.
+            </summary>
+            <param name="error">The response error details</param>
+            <param name="inner">The exception occurred during calling service API.</param>
+        </member>
+        <member name="P:Lykke.Service.ResourceLocker.Client.Exceptions.ErrorResponseException`1.Error">
+            <summary>
+            Gets a response error details.
+            </summary>
+        </member>
+        <member name="P:Lykke.Service.ResourceLocker.Client.Exceptions.ErrorResponseException`1.StatusCode">
+            <summary>
+            Gets a http response status code.
+            </summary>
         </member>
         <member name="T:Lykke.Service.ResourceLocker.Client.ResourceLockerClient">
             <summary>
             ResourceLocker API aggregating interface.
             </summary>
-        </member>
-        <member name="P:Lykke.Service.ResourceLocker.Client.ResourceLockerClient.Api">
-            <summary>Inerface to ResourceLocker Api.</summary>
-        </member>
-        <member name="M:Lykke.Service.ResourceLocker.Client.ResourceLockerClient.#ctor(Lykke.HttpClientGenerator.IHttpClientGenerator)">
-            <summary>C-tor</summary>
         </member>
         <member name="T:Lykke.Service.ResourceLocker.Client.ResourceLockerServiceClientSettings">
             <summary>
@@ -43,6 +62,18 @@
         </member>
         <member name="P:Lykke.Service.ResourceLocker.Client.ResourceLockerServiceClientSettings.ServiceUrl">
             <summary>Service url.</summary>
+        </member>
+        <member name="T:Lykke.Service.ResourceLocker.Client.AutoGeneratedIResourceLockerApi">
+            <inheritdoc />
+        </member>
+        <member name="P:Lykke.Service.ResourceLocker.Client.AutoGeneratedIResourceLockerApi.Client">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ResourceLocker.Client.AutoGeneratedIResourceLockerApi.LockResourceAsync(Lykke.Service.ResourceLocker.Client.Models.LockedResourceRequest)">
+            <inheritdoc />
+        </member>
+        <member name="M:Lykke.Service.ResourceLocker.Client.AutoGeneratedIResourceLockerApi.ReleaseResourceAsync(Lykke.Service.ResourceLocker.Client.Models.ReleaseResourceRequest)">
+            <inheritdoc />
         </member>
     </members>
 </doc>

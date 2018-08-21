@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Lykke.Common.Log;
 using Lykke.Service.ResourceLocker.Core.Services;
 using System;
-using Lykke.Service.ResourceLocker.Models;
 using Lykke.Service.ResourceLocker.Core.Domain;
 
 namespace Lykke.Service.ResourceLocker.Controllers
@@ -28,13 +27,11 @@ namespace Lykke.Service.ResourceLocker.Controllers
         /// Lock resource
         /// </summary>
         /// <param name="request"></param>
-        /// <response code="200"></response>
-        /// <response code="404"></response>
-        /// <response code="501"></response>
+        /// <returns></returns>
         [HttpPost]
         [Route("lockresource")]
         [SwaggerOperation("LockResource")]
-        public async Task<IActionResult> LockResource(LockedResourceRequest request)
+        public async Task<IActionResult> LockResource([FromBody] LockedResourceRequest request)
         {
             try
             {
@@ -42,14 +39,19 @@ namespace Lykke.Service.ResourceLocker.Controllers
             }
             catch(Exception ex)
             {
-
+                _log.Error(ex);
+                throw;
             }
-            return Ok();
         }
+        /// <summary>
+        /// Release resource
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("releaseresource")]
         [SwaggerOperation("ReleaseResource")]
-        public async Task<IActionResult> ReleaseResource(ReleaseResourceRequest request)
+        public async Task<IActionResult> ReleaseResource([FromBody] ReleaseResourceRequest request)
         {
             try
             {
@@ -57,9 +59,9 @@ namespace Lykke.Service.ResourceLocker.Controllers
             }
             catch (Exception ex)
             {
-
+                _log.Error(ex);
+                throw;
             }
-            return Ok();
         }
     }
 }

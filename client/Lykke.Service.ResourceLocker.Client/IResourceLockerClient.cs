@@ -1,14 +1,11 @@
-﻿using JetBrains.Annotations;
+﻿using Lykke.Service.ResourceLocker.Client.Models;
+using System.Threading.Tasks;
 
 namespace Lykke.Service.ResourceLocker.Client
 {
-    /// <summary>
-    /// ResourceLocker client interface.
-    /// </summary>
-    [PublicAPI]
     public interface IResourceLockerClient
     {
-        /// <summary>Application Api interface</summary>
-        IResourceLockerApi Api { get; }
+        Task<LockedResourceResponse> LockResource(LockedResourceRequest request);
+        Task<bool> ReleaseResource(ReleaseResourceRequest request);
     }
 }

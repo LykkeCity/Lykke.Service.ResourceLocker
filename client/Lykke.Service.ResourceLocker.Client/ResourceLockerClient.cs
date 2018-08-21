@@ -15,6 +15,10 @@ namespace Lykke.Service.ResourceLocker.Client
         private readonly HttpClient _httpClient;
         private readonly ApiRunner _runner;
         private readonly IResourceLockerApi _resourceLockerApi;
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="settings"></param>
         public ResourceLockerClient(ResourceLockerServiceClientSettings settings)
         {
             if (settings == null)
@@ -38,14 +42,27 @@ namespace Lykke.Service.ResourceLocker.Client
             _resourceLockerApi = RestService.For<IResourceLockerApi>(_httpClient);
             _runner = new ApiRunner();
         }
+        /// <summary>
+        /// Lock resource
+        /// </summary>
+        /// <param name="request">loecked resource request model</param>
+        /// <returns></returns>
         public Task<LockedResourceResponse> LockResource(LockedResourceRequest request)
         {
             return _runner.RunWithDefaultErrorHandlingAsync(() => _resourceLockerApi.LockResourceAsync(request));
         }
+        /// <summary>
+        /// Release resource
+        /// </summary>
+        /// <param name="request">Released resource request model</param>
+        /// <returns></returns>
         public Task<bool> ReleaseResource(ReleaseResourceRequest request)
         {
             return _runner.RunWithDefaultErrorHandlingAsync(() => _resourceLockerApi.ReleaseResourceAsync(request));
         }
+        /// <summary>
+        /// Dispose
+        /// </summary>
         public void Dispose()
         {
             _httpClient?.Dispose();

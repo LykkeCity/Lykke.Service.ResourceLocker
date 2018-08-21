@@ -1,0 +1,21 @@
+ResourceLockerService: 
+    Db:
+        LogsConnString: 
+            settings-key: LogsConnString 
+            types: [ AzureTableStorage, Tag ] 
+    CacheSettings:
+        RedisConfiguration: RedisConfiguration
+        ResourceLockCacheKeyPattern:
+            settings-key: ResourceLockerService-ResourceLockCacheKeyPattern
+            types: [Tag]
+    SlackNotifications:
+        AzureQueue:
+            ConnectionString:
+                settings-key: SlackNotificationsConnString
+                types: [AzureTableStorage]
+        QueueName: slack-notifications
+    ThrottlingLimitSeconds:
+      settings-key: SlackNotificationsThrottlingLimit
+  MonitoringServiceClient:
+    MonitoringServiceUrl:
+      settings-key: MonitoringServiceUrl

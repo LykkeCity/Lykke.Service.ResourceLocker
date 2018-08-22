@@ -6,9 +6,9 @@
     CacheSettings:
       RedisConfiguration:
         settings-key: RedisConfiguration
-    ResourceLockCacheKeyPattern:
-      settings-key: ResourceLockerService-ResourceLockCacheKeyPattern
-      types: [Tag]
+      ResourceLockCacheKeyPattern:
+        settings-key: ResourceLockerService-ResourceLockCacheKeyPattern
+        types: [Tag]
   SlackNotifications:
     AzureQueue:
       ConnectionString:

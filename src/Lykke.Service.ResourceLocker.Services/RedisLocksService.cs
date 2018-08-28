@@ -23,17 +23,26 @@ namespace Lykke.Service.ResourceLocker.Services
         public Task<bool> TryAcquireLockAsync(ILockedResourceRequest request, DateTime expiration)
         {
             TimeSpan expiresIn = expiration - DateTime.UtcNow;
-            return _database.LockTakeAsync(GetCacheKey(request.ServiceName, request.ResourceId, request.Owner), request.ResourceId, expiresIn);
+            var isexist = _database.KeyExists(GetCacheKey(request.ServiceName, request.ResourceId));
+            if (isexist)
+                return Task.FromResult(false);
+            return _database.LockTakeAsync(GetCacheKey(request.ServiceName, request.ResourceId), request.Owner, expiresIn);
         }
 
-        public Task<bool> ReleaseLockAsync(string key, string resourceId)
+        public async Task<string> GetBlockerOwner(string key)
         {
-            return _database.LockReleaseAsync(key, resourceId);
+            var value = await _database.LockQueryAsync(key);
+            return value.ToString();
         }
 
-        public string GetCacheKey(string serviceName, string resourceId, string owner)
+        public Task<bool> ReleaseLockAsync(string key, string ownerId)
         {
-            return string.Format(_keyPattern, serviceName, resourceId, owner);
+            return _database.LockReleaseAsync(key, ownerId);
+        }
+
+        public string GetCacheKey(string serviceName, string resourceId)
+        {
+            return string.Format(_keyPattern, serviceName, resourceId);
         }
     }
 }

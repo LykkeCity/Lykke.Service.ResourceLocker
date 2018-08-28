@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Lykke.Service.ResourceLocker.Client.Models
+﻿namespace Lykke.Service.ResourceLocker.Client.Models
 {
     /// <summary>
     /// Release model for locked resource
@@ -14,8 +10,8 @@ namespace Lykke.Service.ResourceLocker.Client.Models
         /// </summary>
         public string Key { get; set; }
         /// <summary>
-        /// Locked ResourceId
+        /// Locked owner
         /// </summary>
-        public string ResourceId { get; set; }
+        public string Owner { get; set; }
     }
 }

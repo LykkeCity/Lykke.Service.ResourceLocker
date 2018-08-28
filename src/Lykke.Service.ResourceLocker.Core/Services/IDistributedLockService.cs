@@ -8,7 +8,8 @@ namespace Lykke.Service.ResourceLocker.Core.Services
     {
         Task<bool> TryAcquireLockAsync(ILockedResourceRequest request, DateTime expiration);
 
-        Task<bool> ReleaseLockAsync(string key, string resourceId);
-        string GetCacheKey(string serviceName, string resourceId, string owner);
+        Task<bool> ReleaseLockAsync(string key, string ownerId);
+        string GetCacheKey(string serviceName, string resourceId);
+        Task<string> GetBlockerOwner(string key);
     }
 }

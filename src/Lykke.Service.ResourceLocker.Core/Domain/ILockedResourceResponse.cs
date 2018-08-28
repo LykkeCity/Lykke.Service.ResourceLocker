@@ -8,5 +8,6 @@ namespace Lykke.Service.ResourceLocker.Core.Domain
     {
         string Key { get; set; }
         bool IsLocked { get; set; }
+        string Owner { get; set; }
     }
 }

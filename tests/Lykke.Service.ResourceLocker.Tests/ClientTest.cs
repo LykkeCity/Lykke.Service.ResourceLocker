@@ -47,7 +47,7 @@ namespace Lykke.Service.ResourceLocker.Tests
                 new ReleaseResourceRequest()
                 {
                     Key = "1",
-                    ResourceId = "2"
+                    Owner = "2"
                 });
         }
     }

@@ -35,6 +35,14 @@ namespace Lykke.Service.ResourceLocker.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(request.ResourceId))
+                    return BadRequest("ResourceId required");
+                if (string.IsNullOrEmpty(request.ServiceName))
+                    return BadRequest("ServiceName required");
+                if (string.IsNullOrEmpty(request.Owner))
+                    return BadRequest("Owner required");
+                if (request.ExpirationTime == null)
+                    return BadRequest("ExpirationTime required");
                 return Ok(await _resourceLockService.Block(request));
             }
             catch(Exception ex)
@@ -55,6 +63,10 @@ namespace Lykke.Service.ResourceLocker.Controllers
         {
             try
             {
+                if (string.IsNullOrEmpty(request.Key))
+                    return BadRequest("Key required");
+                if (string.IsNullOrEmpty(request.Owner))
+                    return BadRequest("Owner required");
                 return Ok(await _resourceLockService.Release(request));
             }
             catch (Exception ex)

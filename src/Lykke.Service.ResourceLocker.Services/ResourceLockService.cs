@@ -17,17 +17,19 @@ namespace Lykke.Service.ResourceLocker.Services
 
         public async Task<ILockedResourceResponse> Block(ILockedResourceRequest lockedResource)
         {
+            var key = _resourceLockService.GetCacheKey(lockedResource.ServiceName, lockedResource.ResourceId);
             var locked = new LockedResourceResponse
             {
-                Key = _resourceLockService.GetCacheKey(lockedResource.ServiceName, lockedResource.ResourceId, lockedResource.Owner),
-                IsLocked = await _resourceLockService.TryAcquireLockAsync(lockedResource, lockedResource.ExpirationTime)
+                Key = key,
+                IsLocked = await _resourceLockService.TryAcquireLockAsync(lockedResource, lockedResource.ExpirationTime),
+                Owner = await _resourceLockService.GetBlockerOwner(key)
             };
             return locked;
         }
 
         public async Task<bool> Release(IReleaseResourceRequest lockedResource)
         {
-            return await _resourceLockService.ReleaseLockAsync(lockedResource.Key, lockedResource.ResourceId);
+            return await _resourceLockService.ReleaseLockAsync(lockedResource.Key, lockedResource.Owner);
         }
     }
 }
